@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "unidp"
+dynamic = ["version"]
+license = { text = "AGPL-3.0" }
+description = "A practical tool for converting PDF/DOCX to Markdown/HTML"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+keywords = ["docx_parser", "pdf_parser", "image_parser", "convert", "pdf", "markdown", "html"]
+classifiers = [
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    
+]
+
+[project.optional-dependencies]
+
+api = [
+    "fastapi",
+    "python-multipart",
+    "uvicorn",
+]
+core = [
+    "unidp[pipeline]",
+    "unidp[api]",
+]
+pipeline = [
+    
+]
+all = [
+    "unidp[core]",
+]
+
+[project.urls]
+homepage = "https://unidp.net/"
+documentation = "https://hzm.github.io/unidp/"
+repository = "https://hzm.com/unidp"
+issues = "https://github.com/hzm/unidp/issues"
+
+[project.scripts]
+unidp = "unidp.cli:client.main"
+# unidp-models-download = "unidp.cli.models_download:download_models"
+# unidp-api = "unidp.cli.fast_api:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "unidp.version.__version__" }
+
+[tool.setuptools.packages.find]
+where=["src"]
+include = ["unidp*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+"unidp" = ["resources/**"]
+
+[tool.setuptools]
+include-package-data = true
+zip-safe = false
