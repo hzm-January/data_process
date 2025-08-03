@@ -27,15 +27,33 @@ def do_parse(
     # result = converter.convert(source)
     # print(result.document.export_to_markdown())  # output: "## Docling Technical Report[...]"
 
-    for file_path in input_file_path_list:
-        source = file_path # document per local path or URL
-        converter = DocumentConverter()
-        result = converter.convert(source)
-        print(result.document.export_to_markdown())  # output: "## Docling Technical Report[...]"
-        # Save HTML with externally referenced pictures
-        doc_filename= Path(file_path).stem
-        print(type(doc_filename))
-        html_filename = Path(output_dir) / f"{doc_filename}-with-image-refs.html"
-        result.document.save_as_markdown(html_filename, image_mode=ImageRefMode.REFERENCED)
+    if parse_method=="paddleocr":
+        # Initialize PaddleOCR instance
+        from paddleocr import PaddleOCR
+        ocr = PaddleOCR(
+            use_doc_orientation_classify=False,
+            use_doc_unwarping=False,
+            use_textline_orientation=False)
+
+        # Run OCR inference on a sample image 
+        # result = ocr.predict(input="https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/general_ocr_002.png")
+        result = ocr.predict(input=r"F:\my-home\1-ai-code\16-data-process\data_process\data\input\ylbgd-02.jpg")
+
+        # Visualize the results and save the JSON results
+        for res in result:
+            res.print()
+            res.save_to_img(r"F:\my-home\1-ai-code\16-data-process\data_process\data\output")
+            res.save_to_json(r"F:\my-home\1-ai-code\16-data-process\data_process\data\output")
+    elif parse_method == 'docling':
+        for file_path in input_file_path_list:
+            source = file_path # document per local path or URL
+            converter = DocumentConverter()
+            result = converter.convert(source)
+            print(result.document.export_to_markdown())  # output: "## Docling Technical Report[...]"
+            # Save HTML with externally referenced pictures
+            doc_filename= Path(file_path).stem
+            print(type(doc_filename))
+            html_filename = Path(output_dir) / f"{doc_filename}-with-image-refs.html"
+            result.document.save_as_html(html_filename, image_mode=ImageRefMode.REFERENCED)
 
     logger.info('------- do parse finished --------')

@@ -38,7 +38,7 @@ def main(ctx, input_path, output_dir, **kwargs):
     def parse_doc(input_file_path_list: list[Path]):
         try:
             logger.info('----- parse docx started -----')
-            do_parse(input_file_path_list, output_dir)
+            do_parse(input_file_path_list, output_dir, parse_method='paddleocr')
             logger.info('----- parse docx finished -----')
         except Exception as e:
             logger.exception(e)
